@@ -9,7 +9,8 @@ public abstract class Conta {
     private Cliente dono;
     protected double saldo;
 
-    public Conta(String numero, String agencia, Cliente dono, double saldo) {
+    // nota: o construtor não deve receber o atributo saldo como parâmetro, apenas definir
+    public Conta(String numero, String agencia, Cliente dono) {
         if (numero == null || numero.trim().isEmpty()) {
             throw new IllegalArgumentException("Número não pode ser nulo ou vazio.");
         }
