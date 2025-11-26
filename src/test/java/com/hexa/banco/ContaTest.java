@@ -1,6 +1,11 @@
 package com.hexa.banco;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.hexa.banco.exception.ValidacaoException;
+import com.hexa.banco.model.Cliente;
+import com.hexa.banco.model.ContaCorrente;
+import com.hexa.banco.model.ContaPoupanca;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

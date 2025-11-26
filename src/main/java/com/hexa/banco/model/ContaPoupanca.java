@@ -1,4 +1,6 @@
-package com.hexa.banco;
+package com.hexa.banco.model;
+
+import com.hexa.banco.exception.ValidacaoException;
 
 public class ContaPoupanca extends Conta {
     private double taxaRendimento;

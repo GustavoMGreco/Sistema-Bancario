@@ -1,4 +1,6 @@
-package com.hexa.banco;
+package com.hexa.banco.model;
+
+import com.hexa.banco.exception.ValidacaoException;
 
 import java.util.Objects;
 

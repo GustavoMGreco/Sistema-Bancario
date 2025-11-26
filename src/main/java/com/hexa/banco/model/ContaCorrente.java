@@ -1,6 +1,8 @@
-package com.hexa.banco;
+package com.hexa.banco.model;
 
-public class ContaCorrente extends Conta{
+import com.hexa.banco.exception.ValidacaoException;
+
+public class ContaCorrente extends Conta {
     private double limiteChequeEspecial;
 
     public ContaCorrente(String numero, String agencia, Cliente dono, double limiteChequeEspecial) {

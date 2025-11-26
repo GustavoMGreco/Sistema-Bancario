@@ -1,4 +1,4 @@
-package com.hexa.banco;
+package com.hexa.banco.model;
 
 import java.util.Objects;
 
