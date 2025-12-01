@@ -3,6 +3,7 @@ package com.hexa.banco.model;
 import com.hexa.banco.exception.ValidacaoException;
 
 public class ContaPoupanca extends Conta {
+
     private double taxaRendimento;
 
     public ContaPoupanca(String numero, String agencia, Cliente dono, double taxaRendimento) {
@@ -38,4 +39,5 @@ public class ContaPoupanca extends Conta {
         double rendimento = this.saldo * this.taxaRendimento;
         this.saldo += rendimento;
     }
+
 }
