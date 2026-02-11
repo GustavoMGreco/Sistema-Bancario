@@ -4,6 +4,15 @@ import com.hexa.banco.exception.ValidacaoException;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ContaCorrente.class, name = "CORRENTE"),
+        @JsonSubTypes.Type(value = ContaPoupanca.class, name = "POUPANÇA")
+})
+
 public abstract class Conta {
 
     private String numero;
