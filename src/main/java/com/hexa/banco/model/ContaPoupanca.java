@@ -6,6 +6,8 @@ public class ContaPoupanca extends Conta {
 
     private double taxaRendimento;
 
+    protected ContaPoupanca() {}
+
     public ContaPoupanca(String numero, String agencia, Cliente dono, double taxaRendimento) {
         super(numero, agencia, dono);
 

@@ -14,7 +14,7 @@ public class ServicoPersistencia {
     private File arquivo = new File("dados.json");
 
     public void salvar(List<Conta> listaDeContas) throws IOException {
-        mapper.writeValue(arquivo, listaDeContas);
+        mapper.writerFor(new TypeReference<List<Conta>>() {}).writeValue(arquivo, listaDeContas);
     }
 
     public List<Conta> carregar() throws IOException {

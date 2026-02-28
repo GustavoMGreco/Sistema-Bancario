@@ -2,9 +2,13 @@ package com.hexa.banco;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexa.banco.dto.ContaResponse;
+import com.hexa.banco.dto.CriacaoContaRequest;
 import com.hexa.banco.dto.TransferenciaRequest;
 import com.hexa.banco.exception.ValidacaoException;
+import com.hexa.banco.model.Cliente;
 import com.hexa.banco.model.Conta;
+import com.hexa.banco.model.ContaCorrente;
+import com.hexa.banco.model.ContaPoupanca;
 import com.hexa.banco.repository.ContaRepository;
 import com.hexa.banco.repository.impl.ContaRepositoryEmMemoria;
 import com.hexa.banco.service.ServicoPersistencia;
@@ -68,6 +72,35 @@ public class ApiServer {
             response.status(200);
 
             return "{\"mensagem\": \"Transferência realizada com sucesso.\"}";
+        }));
+
+        post("/contas", ((request, response) -> {
+            response.type("application/json");
+            String texto = request.body();
+            CriacaoContaRequest requisicao = mapper.readValue(texto, CriacaoContaRequest.class);
+            Cliente cliente = new Cliente(requisicao.cpfCliente(), requisicao.nomeCliente());
+
+            Conta novaConta;
+
+            if (contaRepo.buscarPorNumero(requisicao.numero()) != null) {
+                throw new ValidacaoException("Esse número de conta já está em uso");
+            }
+
+            if (requisicao.tipo().equalsIgnoreCase("CORRENTE")) {
+                novaConta = new ContaCorrente(requisicao.numero(), requisicao.agencia(), cliente, requisicao.parametroEspecifico());
+            } else if (requisicao.tipo().equalsIgnoreCase("POUPANCA")) {
+                novaConta = new ContaPoupanca(requisicao.numero(), requisicao.agencia(), cliente, requisicao.parametroEspecifico());
+            } else {
+                throw new ValidacaoException("Tipo de conta inválido.");
+            }
+
+            contaRepo.salvar(novaConta);
+            persistencia.salvar(contaRepo.listarTodos());
+
+            response.status(201);
+            ContaResponse conversao = paraResponse(novaConta);
+
+            return mapper.writeValueAsString(conversao);
         }));
 
         System.out.println("Servidor rodando em http://localhost:8080");

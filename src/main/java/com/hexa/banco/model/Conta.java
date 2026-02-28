@@ -10,15 +10,16 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = ContaCorrente.class, name = "CORRENTE"),
-        @JsonSubTypes.Type(value = ContaPoupanca.class, name = "POUPANÇA")
+        @JsonSubTypes.Type(value = ContaPoupanca.class, name = "POUPANCA")
 })
-
 public abstract class Conta {
 
     private String numero;
     private String agencia;
     private Cliente dono;
     protected double saldo;
+
+    protected Conta() {}
 
     // nota: o construtor não deve receber o atributo saldo como parâmetro, apenas definir
     public Conta(String numero, String agencia, Cliente dono) {

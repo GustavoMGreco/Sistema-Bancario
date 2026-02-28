@@ -7,6 +7,8 @@ public class Cliente {
     private String cpf;
     private String nome;
 
+    protected Cliente() {}
+
     public Cliente(String cpf, String nome) {
         if (nome == null || nome.trim().isEmpty()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio.");

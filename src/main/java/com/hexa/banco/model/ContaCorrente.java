@@ -5,6 +5,8 @@ import com.hexa.banco.exception.ValidacaoException;
 public class ContaCorrente extends Conta {
     private double limiteChequeEspecial;
 
+    protected ContaCorrente() {}
+
     public ContaCorrente(String numero, String agencia, Cliente dono, double limiteChequeEspecial) {
         super(numero, agencia, dono);
 
