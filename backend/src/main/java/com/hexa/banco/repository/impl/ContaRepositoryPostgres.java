@@ -116,9 +116,7 @@ public class ContaRepositoryPostgres implements ContaRepository{
             throw new ValidacaoException("Tipo de conta inválido.");
         }
 
-        if (saldo > 0) {
-            contaEncontrada.depositar(saldo);
-        }
+        contaEncontrada.setSaldo(saldo);
 
         return contaEncontrada;
     }

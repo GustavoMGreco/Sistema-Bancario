@@ -43,6 +43,12 @@ public abstract class Conta {
         return saldo;
     }
 
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public abstract String getTipo();
+
     public void depositar(double valor) {
         if (valor <= 0) {
             throw new ValidacaoException("O valor deve ser maio que zero.");

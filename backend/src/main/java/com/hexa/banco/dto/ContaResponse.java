@@ -1,6 +1,7 @@
 package com.hexa.banco.dto;
 
 public record ContaResponse(
+        String tipo,
         String numero,
         String agencia,
         String nomeCliente,

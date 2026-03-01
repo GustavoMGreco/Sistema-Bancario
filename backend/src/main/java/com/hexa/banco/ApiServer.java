@@ -120,6 +120,7 @@ public class ApiServer {
     // estou convertendo uma Conta (em memória) para uma ContaResponse (que vai para a ‘internet’) ... (converter a Entidade para DTO)
     private static ContaResponse paraResponse(Conta conta) {
         return new ContaResponse(
+                conta.getTipo(),
                 conta.getNumero(),
                 conta.getAgencia(),
                 conta.getDono().getNome(),
