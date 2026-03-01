@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spark.version>2.9.4</spark.version>
         <jackson.version>2.15.2</jackson.version>
+        <postgresql.version>42.7.2</postgresql.version>
         <junit.version>5.9.2</junit.version>
     </properties>
 
@@ -30,10 +31,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope> </dependency>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

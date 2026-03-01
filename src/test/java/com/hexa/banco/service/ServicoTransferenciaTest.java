@@ -6,20 +6,20 @@ import com.hexa.banco.exception.ValidacaoException;
 import com.hexa.banco.model.Cliente;
 import com.hexa.banco.model.ContaCorrente;
 import com.hexa.banco.model.ContaPoupanca;
-import com.hexa.banco.repository.impl.ContaRepositoryEmMemoria;
+import com.hexa.banco.repository.impl.ContaRepositoryPostgres;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ServicoTransferenciaTest {
 
-    ContaRepositoryEmMemoria contaRepo;
+    ContaRepositoryPostgres contaRepo;
     ServicoTransferencia transferencia;
     ContaCorrente contaC;
     ContaPoupanca contaP;
 
     @BeforeEach
     void setUp() {
-        contaRepo = new ContaRepositoryEmMemoria();
+        contaRepo = new ContaRepositoryPostgres();
         transferencia = new ServicoTransferencia(contaRepo);
         Cliente cliente = new Cliente("111.222.333-44", "Gustavo");
         contaC = new ContaCorrente("01", "101", cliente, 1000);
