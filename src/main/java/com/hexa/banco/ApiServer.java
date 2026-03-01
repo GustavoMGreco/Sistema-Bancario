@@ -27,6 +27,7 @@ public class ApiServer {
 
         port(8080);
 
+        // intercepta as requisições e avisa ao navegador que o React tem permissão para consumir a API
         options("/*", (request, response) -> {
             String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
             if (accessControlRequestHeaders != null) {
