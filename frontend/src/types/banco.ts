@@ -4,12 +4,12 @@ export interface Cliente {
 }
 
 export interface Conta {
-    tipo?: string;
+    tipo?: string;      // ? = opcional, para diferenciar conta corrente e poupança
     numero: string;
     agencia: string;
     nomeCliente: string;
     saldo: number;
-    limiteChequeEspecial?: number;  // opcional
-    taxaRendimento?: number;  // opcional
+    limiteChequeEspecial?: number; 
+    taxaRendimento?: number; 
 }
 

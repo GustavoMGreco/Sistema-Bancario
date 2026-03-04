@@ -7,12 +7,14 @@ import com.hexa.banco.model.Cliente;
 import com.hexa.banco.model.ContaCorrente;
 import com.hexa.banco.model.ContaPoupanca;
 import com.hexa.banco.repository.impl.ContaRepositoryPostgres;
+import com.hexa.banco.repository.impl.TransacaoRepositoryPostgres;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ServicoTransferenciaTest {
 
     ContaRepositoryPostgres contaRepo;
+    TransacaoRepositoryPostgres transacaoRepo;
     ServicoTransferencia transferencia;
     ContaCorrente contaC;
     ContaPoupanca contaP;
@@ -20,7 +22,8 @@ public class ServicoTransferenciaTest {
     @BeforeEach
     void setUp() {
         contaRepo = new ContaRepositoryPostgres();
-        transferencia = new ServicoTransferencia(contaRepo);
+        transacaoRepo = new TransacaoRepositoryPostgres();
+        transferencia = new ServicoTransferencia(contaRepo, transacaoRepo);
         Cliente cliente = new Cliente("111.222.333-44", "Gustavo");
         contaC = new ContaCorrente("01", "101", cliente, 1000);
         contaP = new ContaPoupanca("02", "101", cliente, 0.01);

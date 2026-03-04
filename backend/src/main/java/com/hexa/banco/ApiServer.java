@@ -3,14 +3,14 @@ package com.hexa.banco;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexa.banco.dto.ContaResponse;
 import com.hexa.banco.dto.CriacaoContaRequest;
+import com.hexa.banco.dto.TransacaoResponse;
 import com.hexa.banco.dto.TransferenciaRequest;
 import com.hexa.banco.exception.ValidacaoException;
-import com.hexa.banco.model.Cliente;
-import com.hexa.banco.model.Conta;
-import com.hexa.banco.model.ContaCorrente;
-import com.hexa.banco.model.ContaPoupanca;
+import com.hexa.banco.model.*;
 import com.hexa.banco.repository.ContaRepository;
+import com.hexa.banco.repository.TransacaoRepository;
 import com.hexa.banco.repository.impl.ContaRepositoryPostgres;
+import com.hexa.banco.repository.impl.TransacaoRepositoryPostgres;
 import com.hexa.banco.service.ServicoTransferencia;
 
 import java.util.List;
@@ -22,7 +22,8 @@ public class ApiServer {
     public static void main(String[] args) {
 
         ContaRepository contaRepo = new ContaRepositoryPostgres();
-        ServicoTransferencia transferencia = new ServicoTransferencia(contaRepo);
+        TransacaoRepository transacaoRepo = new TransacaoRepositoryPostgres();
+        ServicoTransferencia transferencia = new ServicoTransferencia(contaRepo, transacaoRepo);
         ObjectMapper mapper = new ObjectMapper();
 
         port(8080);
@@ -54,7 +55,7 @@ public class ApiServer {
         get("/contas", ((request, response) -> {
             response.type("application/json");
             List<Conta> listaDeContas = contaRepo.listarTodos();
-            List<ContaResponse> responses = listaDeContas.stream().map(ApiServer::paraResponse).toList();
+            List<ContaResponse> responses = listaDeContas.stream().map(ApiServer::paraResponseConta).toList();
 
             return mapper.writeValueAsString(responses);
         }));
@@ -68,9 +69,19 @@ public class ApiServer {
                 response.status(404);
                 return "{\"erro\": \"Conta não encontrada.\"}";
             }
-            ContaResponse conversao = paraResponse(contaEncontrada);
+            ContaResponse conversao = paraResponseConta(contaEncontrada);
 
             return mapper.writeValueAsString(conversao);
+        }));
+
+        get("/contas/:numero/extrato", ((request, response) -> {
+            response.type("application/json");
+            String numero = request.params(":numero");
+
+            List<Transacao> listaDeTransacoes = transacaoRepo.buscarExtrato(numero);
+            List<TransacaoResponse> responses = listaDeTransacoes.stream().map(ApiServer::paraResponseTransacao).toList();
+
+            return mapper.writeValueAsString(responses);
         }));
 
         post("/transferencias", ((request, response) -> {
@@ -109,7 +120,7 @@ public class ApiServer {
             contaRepo.salvar(novaConta);
 
             response.status(201);
-            ContaResponse conversao = paraResponse(novaConta);
+            ContaResponse conversao = paraResponseConta(novaConta);
 
             return mapper.writeValueAsString(conversao);
         }));
@@ -118,13 +129,25 @@ public class ApiServer {
     }
 
     // estou convertendo uma Conta (em memória) para uma ContaResponse (que vai para a ‘internet’) ... (converter a Entidade para DTO)
-    private static ContaResponse paraResponse(Conta conta) {
+    private static ContaResponse paraResponseConta(Conta conta) {
         return new ContaResponse(
                 conta.getTipo(),
                 conta.getNumero(),
                 conta.getAgencia(),
                 conta.getDono().getNome(),
                 conta.getSaldo()
+        );
+    }
+
+    private static TransacaoResponse paraResponseTransacao(Transacao transacao) {
+        java.time.format.DateTimeFormatter formatador = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String dataFormatada = transacao.getDataHora().format(formatador);
+
+        return new TransacaoResponse(
+                transacao.getContaOrigem(),
+                transacao.getContaDestino(),
+                transacao.getValor(),
+                dataFormatada
         );
     }
 

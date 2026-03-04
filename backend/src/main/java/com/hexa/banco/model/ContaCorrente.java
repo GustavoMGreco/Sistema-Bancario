@@ -17,6 +17,7 @@ public class ContaCorrente extends Conta {
         this.limiteChequeEspecial = limiteChequeEspecial;
     }
 
+    @Override
     public String getTipo() {
         return "CORRENTE";
     }

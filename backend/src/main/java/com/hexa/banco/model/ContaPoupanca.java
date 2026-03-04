@@ -18,6 +18,7 @@ public class ContaPoupanca extends Conta {
         this.taxaRendimento = taxaRendimento;
     }
 
+    @Override
     public String getTipo() {
         return "POUPANCA";
     }

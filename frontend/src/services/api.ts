@@ -9,7 +9,7 @@ export const api = {
         return response.json();
     },
 
-    async tranferir(origem: string, destino: string, valor: number): Promise<void> {
+    async transferir(origem: string, destino: string, valor: number): Promise<void> {
         const response = await fetch(`${BASE_URL}/transferencias`, {
             method: 'POST',
             headers: { 'Content-Type' : 'application.json' },
