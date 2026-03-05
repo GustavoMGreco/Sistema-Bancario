@@ -80,7 +80,7 @@ public class ContaRepositoryPostgres implements ContaRepository{
 
     @Override
     public List<Conta> listarTodos() {
-        String sql = "SELECT * FROM contas";
+        String sql = "SELECT * FROM contas ORDER BY numero ASC";
 
         List<Conta> contas = new ArrayList<>();
 

@@ -35,8 +35,6 @@ function App() {
   async function btnExtratoClick(numero: string) {
     try {
 
-      const extratoConta = await api.buscarExtrato(numero)
-      setExtrato(extratoConta)
       setFiltroExtrato(numero);
       setTelaAtiva('extrato');
 
@@ -51,10 +49,17 @@ function App() {
       .catch((err: Error) => setErro(err.message));
   }, []);
 
-  
-  const extratoFiltrado = filtroExtrato
-    ? extrato.filter(t => t.contaOrigem === filtroExtrato || t.contaDestino === filtroExtrato)
-    : extrato;
+ useEffect(() => {
+  if (telaAtiva === 'extrato' && filtroExtrato) {
+    api.buscarExtrato(filtroExtrato)
+      .then(setExtrato)
+      .catch((err: Error) => setErro(err.message));
+  } else if (!filtroExtrato) {
+    setExtrato([]); 
+  }
+}, [filtroExtrato, telaAtiva]);
+
+const extratoFiltrado = extrato;
 
 return (
     <>
@@ -128,11 +133,6 @@ return (
 
               {/* FILTROS */}
               <div className="hexa-filtros">
-                <button
-                  className={`hexa-filtro-btn ${filtroExtrato === null ? 'active' : ''}`}
-                  onClick={() => setFiltroExtrato(null)}>
-                  Todas
-                </button>
                 {contas.map(conta => (
                   <button
                     key={conta.numero}
