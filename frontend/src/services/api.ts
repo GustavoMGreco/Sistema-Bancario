@@ -19,5 +19,11 @@ export const api = {
             const erro = await response.json();
             throw new Error(erro.erro || 'Erro na transferência');
         }
+    },
+
+    async buscarExtrato(numeroConta: string) {
+        const response = await fetch(`${BASE_URL}/contas/${numeroConta}/extrato`);
+        if (!response.ok) throw new Error('Erro ao buscar extrato');
+        return response.json();
     }
 }

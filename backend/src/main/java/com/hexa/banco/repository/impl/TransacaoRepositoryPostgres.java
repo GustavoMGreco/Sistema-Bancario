@@ -1,17 +1,20 @@
 package com.hexa.banco.repository.impl;
 
-import com.hexa.banco.exception.ValidacaoException;
-import com.hexa.banco.model.*;
-import com.hexa.banco.repository.TransacaoRepository;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.hexa.banco.model.Transacao;
+import com.hexa.banco.repository.TransacaoRepository;
 
 public class TransacaoRepositoryPostgres implements TransacaoRepository {
     String url = "jdbc:postgresql://localhost:5432/SistemaBancario";
     String usuario = "postgres";
-    String senha = "12345";
+    String senha = "";
 
     @Override
     public void registrar(Transacao transacao) {

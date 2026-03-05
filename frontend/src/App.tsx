@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from './services/api';
-import { Conta } from './types/banco';
+import { Conta, Transacao } from './types/banco';
 
 function App() {
   const [contas, setContas] = useState<Conta[]>([]);
@@ -8,9 +8,14 @@ function App() {
   const [contaOrigem, setContaOrigem] = useState<string>('');
   const [contaDestino, setContaDestino] = useState<string>('');
   const [transferencia, setTransferencia] = useState<number>(0);
+  const [extrato, setExtrato] = useState<Transacao[]>([]);
+  const [filtroExtrato, setFiltroExtrato] = useState<string | null>(null);
+
+  const [telaAtiva, setTelaAtiva] = useState<string>('dashboard');
 
   async function btnTransferirClick() {
     try {    
+
       setErro(null)
 
       await api.transferir(contaOrigem, contaDestino, transferencia);
@@ -27,34 +32,138 @@ function App() {
     }
   }
 
+  async function btnExtratoClick(numero: string) {
+    try {
+
+      const extratoConta = await api.buscarExtrato(numero)
+      setExtrato(extratoConta)
+      setFiltroExtrato(numero);
+      setTelaAtiva('extrato');
+
+    } catch (err: unknown) {
+      setErro(err instanceof Error ? err.message : 'Erro desconhecido')
+    }
+  }
+
   useEffect(() => {
     api.listarContas()
       .then(setContas)
-      .catch(err => setErro(err.message));
+      .catch((err: Error) => setErro(err.message));
   }, []);
 
-  return (
-    <>
-      <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-        <h1>Banco Hexa - Painel Administrativo</h1>
-        
-        {erro && <p style={{ color: 'red' }}>{erro}</p>}
+  
+  const extratoFiltrado = filtroExtrato
+    ? extrato.filter(t => t.contaOrigem === filtroExtrato || t.contaDestino === filtroExtrato)
+    : extrato;
 
-        <div style={{ display: 'grid', gap: '10px' }}>
-          {contas.map(conta => (
-            <div key={conta.numero} style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '8px' }}>
-              <strong>{conta.tipo}</strong> - Ag: {conta.agencia} | C/C: {conta.numero}
-              <p>Titular: {conta.nomeCliente}</p>
-              <p>Saldo: <span style={{ color: conta.saldo < 0 ? 'red' : 'green' }}>
-                R$ {conta.saldo.toFixed(2)}
-              </span></p>
+return (
+    <>
+      <div className="hexa-wrap">
+
+        {/* MENU LATERAL */}
+        <aside className="hexa-sidebar">
+          <h2 className="hexa-logo">Banco Hexa</h2>
+          <button
+            onClick={() => setTelaAtiva('dashboard')}
+            className={`hexa-nav-btn ${telaAtiva === 'dashboard' ? 'active' : ''}`}>
+            Contas
+          </button>
+          <button
+            onClick={() => setTelaAtiva('transferencia')}
+            className={`hexa-nav-btn ${telaAtiva === 'transferencia' ? 'active' : ''}`}>
+            Transferência
+          </button>
+          <button
+            onClick={() => { setFiltroExtrato(null); setTelaAtiva('extrato'); }}
+            className={`hexa-nav-btn ${telaAtiva === 'extrato' ? 'active' : ''}`}>
+            Extrato
+          </button>
+        </aside>
+
+        {/* ÁREA DE CONTEÚDO */}
+        <main className="hexa-main">
+
+          {erro && <div className="hexa-erro">{erro}</div>}
+
+          {/* TELA DE CONTAS */}
+          {telaAtiva === 'dashboard' && (
+            <div>
+              <h1 className="hexa-page-title">Visão Geral</h1>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                {contas.map(conta => (
+                  <div key={conta.numero} className="hexa-account-card" style={{ marginBottom: 0 }}>
+                    <div className="hexa-card-type">{conta.tipo}</div>
+                    <div className="hexa-card-meta">Ag: {conta.agencia} &nbsp;|&nbsp; C/C: {conta.numero}</div>
+                    <div className="hexa-card-name">Titular: {conta.nomeCliente}</div>
+                    <div className="hexa-card-saldo-label">Saldo disponível</div>
+                    <div className="hexa-card-saldo" style={{ color: conta.saldo < 0 ? '#f87171' : '#34d399' }}>
+                      R$ {conta.saldo.toFixed(2)}
+                    </div>
+                    <button onClick={() => btnExtratoClick(conta.numero)} className="hexa-extrato-btn">
+                      Ver Extrato →
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-          <input type='text' value={contaOrigem} onChange={(evento) => setContaOrigem(evento.target.value)} />
-          <input type="text" value={contaDestino} onChange={(evento) => setContaDestino(evento.target.value)} />
-          <input type='number' value={transferencia} onChange={(evento) => setTransferencia(Number(evento.target.value))} />
-          <button onClick={btnTransferirClick}>Transferir</button>
-        </div>
+          )}
+
+          {/* TELA DE TRANSFERÊNCIA */}
+          {telaAtiva === 'transferencia' && (
+            <div className="hexa-transferencia-wrap">
+              <h1 className="hexa-page-title">Nova Transferência</h1>
+              <div className="hexa-form-card">
+                <input type='text' value={contaOrigem} onChange={(evento) => setContaOrigem(evento.target.value)} placeholder="Conta de origem" className="hexa-input" />
+                <input type="text" value={contaDestino} onChange={(evento) => setContaDestino(evento.target.value)} placeholder="Conta de destino" className="hexa-input" />
+                <input type='number' value={transferencia} onChange={(evento) => setTransferencia(Number(evento.target.value))} placeholder="Valor (R$)" className="hexa-input" />
+                <button onClick={btnTransferirClick} className="hexa-submit-btn">Transferir</button>
+              </div>
+            </div>
+          )}
+
+          {/* TELA DE EXTRATO */}
+          {telaAtiva === 'extrato' && (
+            <div>
+              <h1 className="hexa-page-title">Histórico de Transações</h1>
+
+              {/* FILTROS */}
+              <div className="hexa-filtros">
+                <button
+                  className={`hexa-filtro-btn ${filtroExtrato === null ? 'active' : ''}`}
+                  onClick={() => setFiltroExtrato(null)}>
+                  Todas
+                </button>
+                {contas.map(conta => (
+                  <button
+                    key={conta.numero}
+                    className={`hexa-filtro-btn ${filtroExtrato === conta.numero ? 'active' : ''}`}
+                    onClick={() => setFiltroExtrato(conta.numero)}>
+                    {conta.nomeCliente} · {conta.numero}
+                  </button>
+                ))}
+              </div>
+
+              {extratoFiltrado.length === 0 ? (
+                <div className="hexa-tx-empty">Nenhuma transação encontrada.</div>
+              ) : (
+                extratoFiltrado.map((transacao, index) => (
+                  <div key={index} className="hexa-tx-row">
+                    <div>
+                      <div className="hexa-tx-accounts">
+                        <span>{transacao.contaOrigem}</span>
+                        <span className="hexa-tx-arrow">→</span>
+                        <span>{transacao.contaDestino}</span>
+                      </div>
+                      <div className="hexa-tx-date">{transacao.dataHora}</div>
+                    </div>
+                    <div className="hexa-tx-value">R$ {Number(transacao.valor).toFixed(2)}</div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
+        </main>
       </div>
     </>
   )

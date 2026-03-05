@@ -1,68 +1,284 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700&display=swap');
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+        .hexa-wrap * { box-sizing: border-box; }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+        .hexa-wrap {
+          font-family: 'Inter', sans-serif;
+          min-height: 100vh;
+          background: #0c0f1a;
+          color: #e2e8f0;
+          display: flex;
+        }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
+        .hexa-sidebar {
+          width: 220px;
+          background: #111827;
+          border-right: 1px solid rgba(255,255,255,0.06);
+          padding: 32px 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          flex-shrink: 0;
+        }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+        .hexa-logo {
+          font-family: 'Sora', sans-serif;
+          font-size: 19px;
+          font-weight: 700;
+          color: #a5b4fc;
+          padding: 0 12px;
+          margin-bottom: 32px;
+          letter-spacing: -0.3px;
+        }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+        .hexa-nav-btn {
+          text-align: left;
+          padding: 10px 14px;
+          border-radius: 10px;
+          border: none;
+          background: transparent;
+          color: #64748b;
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.15s, color 0.15s;
+          width: 100%;
+        }
+        .hexa-nav-btn:hover { background: rgba(255,255,255,0.05); color: #94a3b8; }
+        .hexa-nav-btn.active { background: rgba(99,102,241,0.18); color: #a5b4fc; }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+        .hexa-main {
+          flex: 1;
+          padding: 48px 52px;
+          overflow-y: auto;
+        }
+
+        .hexa-page-title {
+          font-family: 'Sora', sans-serif;
+          font-size: 26px;
+          font-weight: 700;
+          color: #f1f5f9;
+          margin-bottom: 28px;
+          letter-spacing: -0.4px;
+        }
+
+        /* ACCOUNT CARD */
+        .hexa-account-card {
+          background: #111827;
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 16px;
+          padding: 28px;
+          margin-bottom: 16px;
+          position: relative;
+          overflow: hidden;
+          transition: border-color 0.2s, transform 0.2s;
+        }
+        .hexa-account-card:hover { border-color: rgba(99,102,241,0.35); transform: translateY(-2px); }
+        .hexa-account-card::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #6366f1, #a78bfa);
+        }
+
+        .hexa-card-type {
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 1.4px;
+          text-transform: uppercase;
+          color: #818cf8;
+          margin-bottom: 6px;
+        }
+
+        .hexa-card-meta {
+          font-size: 13px;
+          color: #475569;
+          margin-bottom: 4px;
+        }
+
+        .hexa-card-name {
+          font-size: 15px;
+          font-weight: 500;
+          color: #cbd5e1;
+          margin-bottom: 20px;
+        }
+
+        .hexa-card-saldo-label {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: #475569;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .hexa-card-saldo {
+          font-family: 'Sora', sans-serif;
+          font-size: 22px;
+          font-weight: 700;
+          margin-bottom: 20px;
+        }
+
+        .hexa-extrato-btn {
+          background: rgba(99,102,241,0.1);
+          border: 1px solid rgba(99,102,241,0.25);
+          border-radius: 8px;
+          padding: 8px 16px;
+          color: #a5b4fc;
+          font-size: 13px;
+          font-weight: 500;
+          font-family: 'Inter', sans-serif;
+          cursor: pointer;
+          transition: background 0.15s;
+        }
+        .hexa-extrato-btn:hover { background: rgba(99,102,241,0.2); }
+
+        /* TRANSFER FORM — centralizado */
+        .hexa-transferencia-wrap {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: calc(100vh - 96px);
+        }
+
+        .hexa-transferencia-wrap .hexa-page-title {
+          width: 100%;
+          max-width: 480px;
+        }
+
+        .hexa-form-card {
+          background: #111827;
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 16px;
+          padding: 36px;
+          width: 100%;
+          max-width: 480px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .hexa-input {
+          width: 100%;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.09);
+          border-radius: 10px;
+          padding: 12px 16px;
+          color: #e2e8f0;
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .hexa-input:focus {
+          border-color: rgba(99,102,241,0.5);
+          box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+        .hexa-input::placeholder { color: #334155; }
+
+        .hexa-submit-btn {
+          background: linear-gradient(135deg, #6366f1, #8b5cf6);
+          border: none;
+          border-radius: 10px;
+          padding: 14px;
+          color: white;
+          font-family: 'Inter', sans-serif;
+          font-size: 15px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: opacity 0.15s, transform 0.15s;
+          box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+          letter-spacing: 0.2px;
+        }
+        .hexa-submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .hexa-submit-btn:active { transform: translateY(0); }
+
+        /* FILTROS DE EXTRATO */
+        .hexa-filtros {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 24px;
+          flex-wrap: wrap;
+        }
+
+        .hexa-filtro-btn {
+          padding: 6px 14px;
+          border-radius: 20px;
+          border: 1px solid rgba(255,255,255,0.08);
+          background: transparent;
+          color: #64748b;
+          font-size: 12px;
+          font-weight: 500;
+          font-family: 'Inter', sans-serif;
+          cursor: pointer;
+          transition: all 0.15s;
+        }
+        .hexa-filtro-btn:hover { background: rgba(255,255,255,0.04); color: #94a3b8; }
+        .hexa-filtro-btn.active {
+          background: rgba(99,102,241,0.15);
+          border-color: rgba(99,102,241,0.35);
+          color: #a5b4fc;
+        }
+
+        /* EXTRATO */
+        .hexa-tx-row {
+          background: #111827;
+          border: 1px solid rgba(255,255,255,0.06);
+          border-left: 3px solid #6366f1;
+          border-radius: 10px;
+          padding: 16px 20px;
+          margin-bottom: 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          transition: border-color 0.2s;
+        }
+        .hexa-tx-row:hover { border-color: rgba(99,102,241,0.4); }
+
+        .hexa-tx-accounts {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #cbd5e1;
+        }
+
+        .hexa-tx-arrow { color: #475569; font-size: 16px; }
+
+        .hexa-tx-date {
+          font-size: 12px;
+          color: #475569;
+          margin-top: 3px;
+        }
+
+        .hexa-tx-value {
+          font-family: 'Sora', sans-serif;
+          font-size: 16px;
+          font-weight: 700;
+          color: #34d399;
+          flex-shrink: 0;
+        }
+
+        .hexa-tx-empty {
+          color: #475569;
+          font-size: 14px;
+          text-align: center;
+          padding: 48px 0;
+        }
+
+        .hexa-erro {
+          background: rgba(239,68,68,0.1);
+          border: 1px solid rgba(239,68,68,0.25);
+          border-radius: 10px;
+          padding: 12px 16px;
+          color: #f87171;
+          font-size: 13px;
+          margin-bottom: 16px;
+        }

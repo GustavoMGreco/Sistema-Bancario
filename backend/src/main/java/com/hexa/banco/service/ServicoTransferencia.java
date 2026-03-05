@@ -7,8 +7,8 @@ import com.hexa.banco.repository.ContaRepository;
 import com.hexa.banco.repository.TransacaoRepository;
 
 public class ServicoTransferencia {
-    private ContaRepository contaRepo;
-    private TransacaoRepository transacaoRepo;
+    private final ContaRepository contaRepo;
+    private final TransacaoRepository transacaoRepo;
 
     public ServicoTransferencia(ContaRepository contaRepo, TransacaoRepository transacaoRepo) {
         this.contaRepo = contaRepo;

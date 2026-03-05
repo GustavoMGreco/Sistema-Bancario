@@ -13,3 +13,9 @@ export interface Conta {
     taxaRendimento?: number; 
 }
 
+export interface Transacao {
+    contaOrigem: string,
+    contaDestino: string,
+    valor: number,
+    dataHora: string
+}
